@@ -6,7 +6,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config');
 const { PORT, DB_URL } = require('./config')
-const scheduleRouter = require('./schedule/schedule-router');
+const scheduleRouter = require('./setup/setup-router');
 const authRouter = require('./auth/auth-router')
 const usersRouter = require('./users/users-router')
 

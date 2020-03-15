@@ -1,6 +1,8 @@
 const AuthService = require('../auth/auth-service')
 
 function requireAuth(req, res, next) {
+  console.log(" - - -  S  E  C  U  R  I  T  Y  - - -",req)
+
   const authToken = req.get('Authorization') || ''
 
   let bearerToken

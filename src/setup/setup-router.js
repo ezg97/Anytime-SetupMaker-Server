@@ -1,7 +1,7 @@
  const path = require('path')
 const express = require('express')
 const xss = require('xss')
-const ScheduleService = require('./schedule-service')
+const ScheduleService = require('./setup-service')
 const { requireAuth } = require('../middleware/jwt-auth')
 
 const scheduleRouter = express.Router()
