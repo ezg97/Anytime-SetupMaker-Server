@@ -3,16 +3,16 @@ TRUNCATE  employee;
 
 -- insert schedule
 INSERT INTO employee
-  (business_id, emp_name, emp_availability)
+  (business_id, emp_name, pos_importance, pos_skill)
   VALUES
-  (1, 'John Diggle', 'FT'),
-  (1, 'Bruce Kent', 'FT'),
-  (1, 'Clark Wayne', 'FT'),
-  (1, 'ELijah Warrior', 'PT'),
-  (1, 'Ray Friel', 'FT'),
+  (1, 'John Diggle', 3,1),
+  (1, 'Bruce Kent', 3,1),
+  (1, 'Clark Wayne', 3,1),
+  (1, 'ELijah Warrior', 2,4),
+  (1, 'Ray Friel', 3,1),
 
-  (2, 'Earl Thomas', 'FT'),
-  (2, 'John Wayne', 'FT'),
-  (2, 'Paul Washer', 'FT'),
+  (2, 'Earl Thomas', 3,1),
+  (2, 'John Wayne', 3,1),
+  (2, 'Paul Washer', 3,1),
   
-  (3, 'Colin Smith', 'FT');
+  (3, 'Colin Smith', 3,1);
