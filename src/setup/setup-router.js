@@ -4,46 +4,30 @@ const xss = require('xss')
 const ScheduleService = require('./setup-service')
 const { requireAuth } = require('../middleware/jwt-auth')
 
-const scheduleRouter = express.Router()
+const setupRouter = express.Router()
 const jsonParser = express.json()
 
 const logger = require('../logger')
-
-
-//sanitize the schedule table
-const serializeSchedule = schedule => ({
-  id: schedule.id,
-  emp_name: xss(schedule.emp_name),
-  monday: xss(schedule.monday),
-  tuesday: xss(schedule.tuesday),
-  wednesday: xss(schedule.wednesday),
-  thursday: xss(schedule.thursday),
-  friday: xss(schedule.friday),
-  saturday: xss(schedule.saturday),
-  sunday: xss(schedule.sunday),
-});
 
 //sanitize the employee table
 const serializeEmployee = employee => ({
     id: employee.id,
     business_id: employee.business_id,
     emp_name: xss(employee.emp_name),
-    emp_availability: xss(employee.emp_availability),
+    emp_skill: employee.emp_skill,
+    emp_required: employee.emp_required,
+    in_time: employee.in_time,
+    out_time: employee.out_time
   });
 
-  //sanitize the shr table
-const serializeSHR = shr => ({
-    id: shr.id,
-    business_id: shr.business_id,
-    shift_time: shr.shift_time,
-    midday: xss(shr.midday),
-    monday: shr.monday,
-    tuesday: shr.tuesday,
-    wednesday: shr.wednesday,
-    thursday: shr.thursday,
-    friday: shr.friday,
-    saturday: shr.saturday,
-    sunday: shr.sunday,
+  //sanitize the position table
+const serializePosition = obj => ({
+    id: obj.id,
+    business_id: obj.business_id,
+    pos_name: xss(obj.pos_name),
+    pos_importance: obj.pos_importance,
+    pos_skill: obj.pos_skill,
+    pos_required: obj.pos_required,
   });
   
   //sanitize the business table
@@ -56,20 +40,17 @@ const serializeBusiness = business => ({
 const serializeOperation = operation => ({
     id: operation.id,
     business_id: operation.business_id,
-    day: xss(operation.day),
     open_time: xss(operation.open_time),
     close_time: xss(operation.close_time),
   });
 
   function chooseSerialize(table){
-    if(table==='schedule'){
-        return serializeSchedule; 
-    }
-    else if (table==='employee'){
+    
+    if (table==='employee'){
         return serializeEmployee;
     }
-    else if(table==='shr'){
-        return serializeSHR;
+    else if(table==='position'){
+        return serializePosition;
     }
     else if(table==='business'){
         return serializeBusiness;
@@ -90,7 +71,7 @@ const serializeOperation = operation => ({
 /*
  ------------ MASS GRAB OF DATA
  */
-scheduleRouter
+setupRouter
   .route('/all')
   .all(requireAuth)
   /* -------------------
@@ -122,7 +103,6 @@ scheduleRouter
 
      ------------------- */
   .post(jsonParser, (req, res, next) => {
-
     const data = req.body;
     const table = req.app.get('table');
     if(isEmpty(req.body)){
@@ -142,11 +122,10 @@ scheduleRouter
     )
     .then(responseData => {
         const serializeFunction = chooseSerialize(table);
-        
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${responseData.id}`))
-          .json(serializeFunction(responseData))
+          .json(serializeFunction([responseData]))
       })
       .catch(next)
   })
@@ -155,7 +134,7 @@ scheduleRouter
   /*
  ------------ SINGLE GRAB OF DATA BY ID
  */
-scheduleRouter
+setupRouter
   .route('/:data_id')
   .all(requireAuth)
   /* -------------------
@@ -221,8 +200,18 @@ scheduleRouter
   .patch(jsonParser, (req, res, next) => {
     //const { title, content, style } = req.body
     const dataToUpdate = req.body; //{ title, content, style }
+    let numberOfValues=0;
 
-    const numberOfValues = Object.values(dataToUpdate).filter(Boolean).length
+    //I need to do this for when pos_requirements contains false
+    //code in the else loop doesn't count false values.
+    if(dataToUpdate.pass === undefined? false:true){
+      delete dataToUpdate['pass'];
+      numberOfValues = 1;
+    }
+    else{
+      numberOfValues = Object.values(dataToUpdate).filter(Boolean).length;
+    }
+    
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
@@ -247,7 +236,7 @@ scheduleRouter
    /*
  ------------ MASS GRAB OF DATA BY ID
  */
-scheduleRouter
+setupRouter
 .route('/business/:business_id')
 .all(requireAuth)
 /* -------------------
@@ -305,5 +294,6 @@ scheduleRouter
       })
       .catch(next)
     })
+    
 
-module.exports = scheduleRouter;
+module.exports = setupRouter;

@@ -1,7 +1,7 @@
 TRUNCATE operation;
 
 INSERT INTO operation
-  (business_id, day, open_time, close_time)
+  (business_id, open_time, close_time)
   VALUES 
   (1, '12AM', '5PM'),
   (1, '5AM', '10AM'),
