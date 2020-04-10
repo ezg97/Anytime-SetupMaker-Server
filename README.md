@@ -1,14 +1,14 @@
-# Anytime Scheduler Server
+# Anytime SetupMaker Server
 
-Live Site: [Anytime Scheduler](https://anytime-scheduler-client.now.sh/)
+Live Site: [Anytime SetupMaker](https://anytime-setupmaker.now.sh)
 
 ## Description
-Create an account or login if you're an existing user, then add, edit, or delete users from your company, edit the hours of operation, and the labor (amount of employees working per hour). The info you provide will allow the application to generate a weekly schedule that adheres to your specifications. 
+Create an account or login if you're an existing user, then add, edit, or delete users/positions from your company, edit the hours of operation,  and arrange the schedule (positions, employees, and employees shift for the setup). The info you provide will allow the application to generate a daily setup that adheres to your specifications. 
+
 
 ## Technologies Used
 This backend api/database uses Node JS/Express/PostgreSQL/Mocha/Chai for the managing of the database and the server.
-The client side repo can be found here: https://github.com/ezg97/Anytime-Scheduler-Client
-
+The client side repo can be found here: https://github.com/ezg97/Anytime-SetupMaker-Client
 
 ## API Endpoints:
 
