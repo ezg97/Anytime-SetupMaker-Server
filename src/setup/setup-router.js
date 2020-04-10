@@ -1,13 +1,13 @@
- const path = require('path')
-const express = require('express')
-const xss = require('xss')
-const ScheduleService = require('./setup-service')
-const { requireAuth } = require('../middleware/jwt-auth')
+ const path = require('path');
+const express = require('express');
+const xss = require('xss');
+const ScheduleService = require('./setup-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
-const setupRouter = express.Router()
-const jsonParser = express.json()
+const setupRouter = express.Router();
+const jsonParser = express.json();
 
-const logger = require('../logger')
+const logger = require('../logger');
 
 //sanitize the employee table
 const serializeEmployee = employee => ({
@@ -63,9 +63,9 @@ const serializeOperation = operation => ({
   function isEmpty(obj){
     for(let key in obj){
         if(obj.hasOwnProperty(key))
-            return false
+            return false;
     }
-    return true
+    return true;
 }
 
 /*
@@ -95,7 +95,7 @@ setupRouter
           // the object that is being iterated.
           res.json(response.map( serializeFunction ));        
       })
-      .catch(next)
+      .catch(next);
   })
   /* -------------------
 
@@ -127,7 +127,7 @@ setupRouter
           .location(path.posix.join(req.originalUrl, `/${responseData.id}`))
           .json(serializeFunction([responseData]))
       })
-      .catch(next)
+      .catch(next);
   })
 
 
@@ -156,9 +156,9 @@ setupRouter
         }
         //Save the response from the request to "res.data"
         res.data = data;
-        next()
+        next();
       })
-      .catch(next)
+      .catch(next);
   })
   /* -------------------
 
@@ -173,7 +173,7 @@ setupRouter
    
     const serializeFunction = chooseSerialize(table);
     
-    res.json( res.data.map( serializeFunction ) )
+    res.json( res.data.map( serializeFunction ) );
   })
   /* -------------------
 
@@ -187,10 +187,10 @@ setupRouter
       req.params.data_id
     )
       .then(numRowsAffected => {
-        logger.info(`${req.app.get('table')} with id ${req.params.data_id} deleted.`)
-        res.status(204).end()
+        logger.info(`${req.app.get('table')} with id ${req.params.data_id} deleted.`);
+        res.status(204).end();
       })
-      .catch(next)
+      .catch(next);
   })
   /* -------------------
 
@@ -198,8 +198,7 @@ setupRouter
 
      ------------------- */
   .patch(jsonParser, (req, res, next) => {
-    //const { title, content, style } = req.body
-    const dataToUpdate = req.body; //{ title, content, style }
+    const dataToUpdate = req.body;
     let numberOfValues=0;
 
     //I need to do this for when pos_requirements contains false
@@ -217,7 +216,7 @@ setupRouter
         error: {
           message: `Request body must content either 'title', 'style' or 'content'`
         }
-      })
+      });
 
     ScheduleService.updateData(
       req.app.get('db'),
@@ -227,10 +226,10 @@ setupRouter
     )
     .then(numRowsAffected => {
         res.
-        status(204).end()
+        status(204).end();
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
 
    /*
@@ -250,16 +249,16 @@ setupRouter
     req.params.business_id
   )
     .then(data => {
-      if (!data || data.length < 1) {
+      if (!data) {
         return res.status(404).json({
           error: { message: `Data Not Found` }
-        })
+        });
       }
       //Save the response from the request to "res.data"
-      res.data = data
-      next()
+      res.data = data;
+      next();
     })
-    .catch(next)
+    .catch(next);
 })
 /* -------------------
 
@@ -276,7 +275,7 @@ setupRouter
   // the serialized object to "res.json()"
   res.json(res.data.map(obj => {
     return serializeFunction(obj);
-  }))
+  }));
 })
 /* -------------------
 
@@ -290,10 +289,10 @@ setupRouter
         req.params.business_id
     )
       .then(numRowsAffected => {
-          res.status(204).end()
+          res.status(204).end();
       })
-      .catch(next)
-    })
+      .catch(next);
+    });
     
 
 module.exports = setupRouter;

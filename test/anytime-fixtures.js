@@ -37,47 +37,56 @@ function business() {
 function employees(){
     return [
     { emp_name: 'John Diggle',
-      availability: 'FT',
-      business_id: 1
+      business_id: 1,
+      pos_importance: 3,
+      pos_skill: 1,
     },
     { emp_name: 'Bruce Kent',
-      availability: 'FT',
-      business_id: 1
+      business_id: 1,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'Clark Wayne',
-      availability: 'FT',
-      business_id: 1
+      business_id: 1,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'ELijah Warrior',
-      availability: 'PT',
-      business_id: 1
+      business_id: 1,
+      pos_importance: 2,
+      pos_skill: 4,
 
     },
     { emp_name: 'Ray Friel',
-      availability: 'FT',
-      business_id: 1
+      business_id: 1,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'Earl Thomas',
-      availability: 'FT',
-      business_id: 2
+      business_id: 2,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'John Wayne',
-      availability: 'PT',
-      business_id: 2
+      business_id: 2,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'Paul Washer',
-      availability: 'FT',
-      business_id: 2
+      business_id: 2,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
     { emp_name: 'Colin Smith',
-      availability: 'FT',
-      business_id: 3
+      business_id: 3,
+      pos_importance: 3,
+      pos_skill: 1,
 
     },
   ]
@@ -215,15 +224,15 @@ function maliciousBusiness() {
     }
 
     const maliciousEmployees = {
-        business_id: 4,   
+        business_id: 4,  
         emp_name: 'Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
-        emp_availability: 'FT'
+        emp_skill: 1,
      }
 
  const expectedEmployees = {
      business_id: 4,
      emp_name: 'Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.',
-     emp_availability: 'FT'
+     emp_skill: 1,
  }
  
     

@@ -10,12 +10,6 @@ const setupRouter = require('./setup/setup-router');
 const authRouter = require('./auth/auth-router')
 const usersRouter = require('./users/users-router')
 
-/*///////////////////////////////////
-const jwt = require('jsonwebtoken');
-
-app.use(express.json())
-///////////////////////////////////*/
-
 //  --- middleware ---
 const app = express()
 
@@ -62,61 +56,3 @@ app.use((error, req, res, next) => {
 
 //  --- export ---
 module.exports = app;
-
-/*app.get('/st', (req,res,next) => {
-    ScheduleService.getInfo(req.app.get('db'))
-      .then(info => {
-        if (!info) {
-          logger.error(`No info found.`)
-          return res.status(404).json({
-            error: { message: `Info Not Found` }
-          })
-        }
-        res.json(info)
-      })
-      .catch(next)
-})*/
-
-
-
-
-/*test info
-
-const posts = [
-  {
-    username: 'ezg97',
-    title: 'Post 1'
-  },
-  {
-    username: 'Jim2',
-    title: 'Post2'
-  }
-]
-
-// test post endpoint
-app.get('/posts', authenticateToken, (req,res) => {
-  res.json(posts.filter(post => post.username === req.user.name))
-
-
-})
-
-
-// -- middleware
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'] 
-  const token = authHeader && authHeader.split(' ')[1]
- // Bearer TOKEN
-
-  if(token == null) return res.sendStatus(401)
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if(err) return res.sendStatus(403)
-
-    req.user = user
-    next();
- })
-
-
-
-}
-*/
