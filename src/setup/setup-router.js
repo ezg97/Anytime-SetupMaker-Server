@@ -2,11 +2,9 @@
 const express = require('express');
 const xss = require('xss');
 const ScheduleService = require('./setup-service');
-const { requireAuth } = require('../middleware/jwt-auth');
-
+const {requireAuth} = require('../middleware/jwt-auth');
 const setupRouter = express.Router();
 const jsonParser = express.json();
-
 const logger = require('../logger');
 
 //sanitize the employee table
@@ -45,7 +43,6 @@ const serializeOperation = operation => ({
   });
 
   function chooseSerialize(table){
-    
     if (table==='employee'){
         return serializeEmployee;
     }
@@ -83,14 +80,11 @@ setupRouter
     //grabbing the database and table
     const knexInstance = req.app.get('db');
     const table = req.app.get('table');
-
     //making the call to the method that will get the data from the DataBase
     ScheduleService.getAllData(knexInstance, table)
       .then(response => {
-
           //call a function that will decide which method to iterate for serialization
           const serializeFunction = chooseSerialize(table);
-
           //The response is list of object(s). Calling the serialize function will cause it to select
           // the object that is being iterated.
           res.json(response.map( serializeFunction ));        
@@ -105,6 +99,7 @@ setupRouter
   .post(jsonParser, (req, res, next) => {
     const data = req.body;
     const table = req.app.get('table');
+
     if(isEmpty(req.body)){
       logger.error(`Empty request body`);
       return res.status(400).send(`Empty request body`);
@@ -115,6 +110,7 @@ setupRouter
         logger.error(`Missing '${key}' in request body`);
         return res.status(400).send(`Missing '${key}' in request body`);
       }
+
     ScheduleService.insertData(
       req.app.get('db'),
       table,
@@ -128,8 +124,7 @@ setupRouter
           .json(serializeFunction([responseData]))
       })
       .catch(next);
-  })
-
+  });
 
   /*
  ------------ SINGLE GRAB OF DATA BY ID
@@ -148,17 +143,17 @@ setupRouter
       req.app.get('table'),
       req.params.data_id
     )
-      .then(data => {
-        if (!data || data.length < 1) {
-          return res.status(404).json({
-            error: { message: `Data Not Found` }
-          });
-        }
-        //Save the response from the request to "res.data"
-        res.data = data;
-        next();
-      })
-      .catch(next);
+    .then(data => {
+      if (!data || data.length < 1) {
+        return res.status(404).json({
+          error: {message: `Data Not Found`}
+        });
+      }
+      //Save the response from the request to "res.data"
+      res.data = data;
+      next();
+    })
+    .catch(next);
   })
   /* -------------------
 
@@ -170,10 +165,8 @@ setupRouter
     const table = req.app.get('table');
     // choose which function needs to be called so the
     // data can be serialized 
-   
     const serializeFunction = chooseSerialize(table);
-    
-    res.json( res.data.map( serializeFunction ) );
+    res.json(res.data.map(serializeFunction));
   })
   /* -------------------
 
@@ -186,11 +179,11 @@ setupRouter
       req.app.get('table'),
       req.params.data_id
     )
-      .then(numRowsAffected => {
-        logger.info(`${req.app.get('table')} with id ${req.params.data_id} deleted.`);
-        res.status(204).end();
-      })
-      .catch(next);
+    .then(numRowsAffected => {
+      logger.info(`${req.app.get('table')} with id ${req.params.data_id} deleted.`);
+      res.status(204).end();
+    })
+    .catch(next);
   })
   /* -------------------
 
@@ -200,7 +193,6 @@ setupRouter
   .patch(jsonParser, (req, res, next) => {
     const dataToUpdate = req.body;
     let numberOfValues=0;
-
     //I need to do this for when pos_requirements contains false
     //code in the else loop doesn't count false values.
     if(dataToUpdate.pass === undefined? false:true){
@@ -225,10 +217,10 @@ setupRouter
       dataToUpdate
     )
     .then(numRowsAffected => {
-        res.
+      res.
         status(204).end();
-      })
-      .catch(next);
+    })
+    .catch(next);
   });
 
 
@@ -248,17 +240,17 @@ setupRouter
     req.app.get('table'),
     req.params.business_id
   )
-    .then(data => {
-      if (!data) {
-        return res.status(404).json({
-          error: { message: `Data Not Found` }
-        });
-      }
-      //Save the response from the request to "res.data"
-      res.data = data;
-      next();
-    })
-    .catch(next);
+  .then(data => {
+    if (!data) {
+      return res.status(404).json({
+        error: {message: `Data Not Found`}
+      });
+    }
+    //Save the response from the request to "res.data"
+    res.data = data;
+    next();
+  })
+  .catch(next);
 })
 /* -------------------
 
@@ -288,11 +280,11 @@ setupRouter
         req.app.get('table'),
         req.params.business_id
     )
-      .then(numRowsAffected => {
-          res.status(204).end();
-      })
-      .catch(next);
-    });
+    .then(numRowsAffected => {
+        res.status(204).end();
+    })
+    .catch(next);
+  });
     
 
 module.exports = setupRouter;
